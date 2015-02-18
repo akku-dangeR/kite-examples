@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2013 Cloudera Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.kitesdk.examples</groupId>
+  <artifactId>crunch-passivity</artifactId>
+  <version>0.18.0</version>
+  <packaging>jar</packaging>
+
+  <name>Kite Schema Crunch Passivity Examples</name>
+
+  <parent>
+    <groupId>org.kitesdk</groupId>
+    <artifactId>kite-app-parent-cdh4</artifactId>
+    <version>0.18.0</version>
+  </parent>
+
+  <build>
+    <plugins>
+      <!-- Compile Avro schemas -->
+      <plugin>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <compilerArgument>-Xlint:unchecked</compilerArgument>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>1.7.1</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>shade</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>META-INF/LICENSE</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </plugin>
+      <!-- <plugin>
+        <groupId>org.kitesdk</groupId>
+        <artifactId>kite-maven-plugin</artifactId>
+        <configuration>
+          <repositoryUri>repo:hdfs://localhost.localdomain:8020/test_crunch_passivity/users</repositoryUri> 
+          <datasetName>users</datasetName>
+          <datasetNamespace>test_crunch_passivity</datasetNamespace>
+          <uri>dataset:hdfs://localhost.localdomain:8020/test_crunch_passivity/users/</uri>
+          <avroSchemaFile>src/main/avro/user.avsc</avroSchemaFile>
+        </configuration>
+      </plugin>  -->
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${hadoop.log4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${hadoop.slf4j.version}</version>
+    </dependency>
+    <!-- <dependency>
+      <groupId>org.kitesdk</groupId>
+      <artifactId>kite-hadoop-cdh4-dependencies</artifactId>
+      <version>${kite.version}</version>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency> -->
+<dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.0.0-mr1-cdh4.4.0</version>
+      <scope>compile</scope>
+      <!-- exclude server-side parts that conflict with running in a webapp -->
+      <exclusions>
+        <exclusion>
+          <groupId>com.sun.jersey</groupId>
+          <artifactId>jersey-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.jersey</groupId>
+          <artifactId>jersey-server</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro-mapred</artifactId>
+      <classifier>hadoop2</classifier>
+      <version>1.7.5</version>
+      <!-- Avro IPC is not used and pulls in server-side dependencies -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.avro</groupId>
+          <artifactId>avro-ipc</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- missing from Hadoop, and needed for local job runner. see HADOOP-9557 -->
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>    
+    <!--  <dependency>
+      <groupId>org.kitesdk</groupId>
+      <artifactId>kite-hbase-cdh5-dependencies</artifactId>
+      <version>${kite.version}</version>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency> -->
+  </dependencies>
+
+</project>
