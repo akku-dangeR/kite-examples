@@ -1,7 +1,8 @@
-UPDATE ME
+
 # Kite Crunch passivity Example
 
 ## Running
+Note: The example works only with CDH4
 
 Build the code with:
 
