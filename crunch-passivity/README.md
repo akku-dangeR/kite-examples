@@ -22,18 +22,10 @@ Read some from the dataset:
 hadoop jar crunch-passivity-0.18.0.jar org.kitesdk.examples.data.ReadUserDataset
 ```
 
-Once we have created a dataset and written some data to it, the next thing to do is to
-read it back. We can do this with the `ReadUserDataset` program.
-
-```bash
-mvn exec:java -Dexec.mainClass="org.kitesdk.examples.data.ReadUserDataset"
-```
-
 ## Schema Evolution
 
-
-Then copy the contents of _src/main/avro/user.avsc.valid-migration_ to
-_src/main/avro/user.avsc_, and update the dataset's schema, load new items:
+Copy the contents of _src/main/avro/user.avsc.valid-migration_ to
+_src/main/avro/user.avsc_, update the dataset's schema, and load new items:
 
 ```bash
 cp src/main/avro/user.avsc.invalid-migration src/main/avro/user.avsc.old-schema
